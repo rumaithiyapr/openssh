@@ -170,13 +170,13 @@
             return;
         }
 
-        fetch(`http://localhost:5000/api/get-shareholder?box_number=${boxNumber}&civil_id=${civilId}`)
+        fetch(`http://localhost:5000/api/get-shareholder?boxnumber=${boxNumber}&civilid=${civilId}`)
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
                     document.getElementById("name").value = data.data.name || '';
-                    document.getElementById("boxNumber").value = data.data.box_number || '';
-                    document.getElementById("civilId").value = data.data.civil_id || '';
+                    document.getElementById("boxNumber").value = data.data.boxnumber || '';
+                    document.getElementById("civilId").value = data.data.civilid || '';
                     checkFormValidity();
                 } else {
                     alert(data.message || "لم يتم العثور على البيانات.");
