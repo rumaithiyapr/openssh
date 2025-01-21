@@ -170,7 +170,7 @@
             return;
         }
 
-        fetch(`http://localhost:5000/api/get-shareholder?boxnumber=${boxNumber}&civilid=${civilId}`)
+        fetch("https://openssh-n3wbqudbw-rumaithiyaprs-projects.vercel.app/api/get-shareholder?boxnumber=${boxNumber}&civilid=${civilId}")
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
@@ -199,7 +199,7 @@
 
         const formData = new FormData(this);
 
-        fetch("http://localhost:5000/api/save-shareholder", {
+        fetch("https://openssh-n3wbqudbw-rumaithiyaprs-projects.vercel.app/api/save-shareholder", {
             method: "POST",
             body: formData
         })
