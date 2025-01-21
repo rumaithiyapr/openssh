@@ -170,7 +170,7 @@
             return;
         }
 
-        fetch(`http://127.0.0.1:5000/api/get-shareholder?box_number=${boxNumber}&civil_id=${civilId}`)
+        fetch(`https://d53d-195-39-172-34.ngrok-free.app/api/get-shareholder?box_number=${boxNumber}&civil_id=${civilId}`)
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
@@ -199,7 +199,7 @@
 
         const formData = new FormData(this);
 
-        fetch("http://127.0.0.1:5000/api/save-shareholder", {
+        fetch("https://d53d-195-39-172-34.ngrok-free.app/api/save-shareholder", {
             method: "POST",
             body: formData
         })
