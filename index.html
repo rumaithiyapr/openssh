@@ -119,16 +119,16 @@
             <input type="number" id="boxNumber" name="boxNumber" readonly>
         </div>
         <div class="input-group">
-            <label for="civilId">رقم المدني</label>
-            <input type="number" id="civilId" name="civilId" readonly>
+            <label for="civilid">رقم المدني</label>
+            <input type="number" id="civilid" name="civilid" readonly>
         </div>
         <div class="input-group">
             <label for="phone1">رقم الموبايل 1</label>
-            <input type="number" id="phone1" name="phone1" required>
+            <input type="tel" id="phone1" name="phone1" required>
         </div>
         <div class="input-group">
             <label for="phone2">رقم الموبايل 2 (اختياري)</label>
-            <input type="number" id="phone2" name="phone2">
+            <input type="tel" id="phone2" name="phone2">
         </div>
         <div id="fileInputsContainer" class="input-group">
             <label>رفع المستندات</label>
@@ -136,8 +136,8 @@
         </div>
         <button type="button" class="add-file-btn" id="addFileButton">إضافة مستند آخر</button>
         <div class="input-group">
-            <label for="optionalEmail">البريد الإلكتروني (اختياري)</label>
-            <input type="email" id="optionalEmail" name="optionalEmail">
+            <label for="email">البريد الإلكتروني (اختياري)</label>
+            <input type="email" id="email" name="email">
         </div>
         <button type="submit" class="upload-btn" id="submitButton" disabled>إرسال</button>
         <div class="notes">
@@ -170,13 +170,13 @@
             return;
         }
 
-        fetch(`https://d53d-195-39-172-34.ngrok-free.app/api/get-shareholder?box_number=${boxNumber}&civil_id=${civilId}`)
+        fetch(`https://d53d-195-39-172-34.ngrok-free.app/api/get-shareholder?boxnumber=${boxNumber}&civilid=${civilId}`)
             .then(response => response.json())
             .then(data => {
-                if (data.success) {
-                    document.getElementById("name").value = data.data.name || '';
-                    document.getElementById("boxNumber").value = data.data.box_number || '';
-                    document.getElementById("civilId").value = data.data.civil_id || '';
+                if (data.name) {
+                    document.getElementById("name").value = data.name || '';
+                    document.getElementById("boxNumber").value = data.boxnumber || '';
+                    document.getElementById("civilid").value = data.civilid || '';
                     checkFormValidity();
                 } else {
                     alert(data.message || "لم يتم العثور على البيانات.");
@@ -223,7 +223,7 @@
     function checkFormValidity() {
         const name = document.getElementById("name").value;
         const boxNumber = document.getElementById("boxNumber").value;
-        const civilId = document.getElementById("civilId").value;
+        const civilId = document.getElementById("civilid").value;
         const phone1 = document.getElementById("phone1").value;
         const files = document.querySelectorAll(".file-upload");
 
