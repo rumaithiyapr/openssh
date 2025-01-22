@@ -182,6 +182,15 @@ retrieveButton.addEventListener("click", function () {
         return;
     }
 
+  retrieveButton.addEventListener("click", function () {
+    const boxNumber = document.getElementById("retrieveBoxNumber").value;
+    const civilId = document.getElementById("retrieveCivilId").value;
+
+    if (!boxNumber || !civilId) {
+        alert("يرجى إدخال رقم الصندوق ورقم المدني.");
+        return;
+    }
+
     fetch(`https://4f65-195-39-172-34.ngrok-free.app/api/get-shareholder?boxnumber=${boxNumber}&civilid=${civilId}`)
         .then(response => {
             if (!response.ok) {
@@ -203,7 +212,7 @@ retrieveButton.addEventListener("click", function () {
             console.error("Error:", error);
             alert("حدث خطأ أثناء جلب البيانات.");
         });
-    
+});    
     addFileButton.addEventListener("click", function () {
         const input = document.createElement("input");
         input.type = "file";
