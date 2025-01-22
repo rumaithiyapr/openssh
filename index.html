@@ -48,14 +48,16 @@
             margin-bottom: 5px;
         }
 
-        .input-group input, .input-group file {
+        .input-group input, 
+        .input-group file {
             width: 100%;
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 4px;
         }
 
-        .upload-btn, .add-file-btn {
+        .upload-btn, 
+        .add-file-btn {
             display: block;
             width: 100%;
             padding: 10px;
@@ -68,11 +70,12 @@
             margin-bottom: 10px;
         }
 
-        .upload-btn:hover, .add-file-btn:hover {
+        .upload-btn:hover, 
+        .add-file-btn:hover {
             background-color: #218838;
         }
 
-        .success-message,
+        .success-message, 
         .error-message {
             display: none;
             text-align: center;
@@ -170,7 +173,7 @@
             return;
         }
 
-        fetch("https://4f65-195-39-172-34.ngrok-free.app/api/get-shareholder?boxnumber=${boxNumber}&civilid=${civilId}")
+        fetch(`https://4f65-195-39-172-34.ngrok-free.app/api/get-shareholder?boxnumber=${boxNumber}&civilid=${civilId}`)
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
