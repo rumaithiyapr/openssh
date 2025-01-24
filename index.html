@@ -55,8 +55,7 @@
             border-radius: 4px;
         }
 
-        .upload-btn, 
-        .add-file-btn {
+        .upload-btn {
             display: block;
             width: 100%;
             padding: 10px;
@@ -69,12 +68,11 @@
             margin-bottom: 10px;
         }
 
-        .upload-btn:hover, 
-        .add-file-btn:hover {
+        .upload-btn:hover {
             background-color: #218838;
         }
 
-        .success-message, 
+        .success-message,
         .error-message {
             display: none;
             text-align: center;
@@ -97,46 +95,20 @@
     </div>
     <div class="header">تحديث بطاقة العائلة 2025</div>
 
-<script>
-    const retrieveButton = document.getElementById("retrieveButton");
+    <!-- Form to Retrieve Data -->
+    <form id="retrieveForm">
+        <div class="input-group">
+            <label for="retrieveBoxNumber">رقم الصندوق</label>
+            <input type="number" id="retrieveBoxNumber" required>
+        </div>
+        <div class="input-group">
+            <label for="retrieveCivilId">رقم المدني</label>
+            <input type="number" id="retrieveCivilId" required>
+        </div>
+        <button type="button" class="upload-btn" id="retrieveButton">جلب البيانات</button>
+    </form>
 
-    retrieveButton.addEventListener("click", function () {
-        const boxNumber = document.getElementById("retrieveBoxNumber").value.trim();
-        const civilId = document.getElementById("retrieveCivilId").value.trim();
-
-        // Validate inputs
-        if (!boxNumber || !civilId) {
-            alert("يرجى إدخال رقم الصندوق ورقم المدني.");
-            return;
-        }
-
-        // Make the API call
-        fetch(`https://aa12-195-39-172-34.ngrok-free.app/api/get-shareholder?boxnumber=${boxNumber}&civilid=${civilId}`)
-            .then(response => {
-                if (!response.ok) {
-                    // Handle HTTP errors
-                    throw new Error(`HTTP error ${response.status}`);
-                }
-                return response.json();
-            })
-            .then(data => {
-                // Check if data exists and is valid
-                if (data && data.length > 0) {
-                    const record = data[0];
-                    document.getElementById("name").value = record.name || '';
-                    document.getElementById("boxNumber").value = record.boxnumber || '';
-                    document.getElementById("civilId").value = record.civilid || '';
-                } else {
-                    alert("لا توجد بيانات مطابقة.");
-                }
-            })
-            .catch(err => {
-                console.error("Fetch error:", err);
-                alert("حدث خطأ أثناء جلب البيانات. يرجى المحاولة مرة أخرى.");
-            });
-    });
-</script>
-
+    <!-- Form to Submit Data -->
     <form id="familyForm" enctype="multipart/form-data">
         <div class="input-group">
             <label for="name">الاسم</label>
@@ -146,58 +118,4 @@
             <label for="boxNumber">رقم الصندوق</label>
             <input type="number" id="boxNumber" name="boxNumber" readonly>
         </div>
-        <div class="input-group">
-            <label for="civilId">رقم المدني</label>
-            <input type="number" id="civilId" name="civilId" readonly>
-        </div>
-        <div class="input-group">
-            <label for="phone1">رقم الموبايل 1</label>
-            <input type="number" id="phone1" name="phone1" required>
-        </div>
-        <div id="fileInputsContainer" class="input-group">
-            <label>رفع المستندات</label>
-            <input type="file" name="files" class="file-upload" required>
-        </div>
-        <button type="submit" class="upload-btn" id="submitButton">إرسال</button>
-        <div id="successMessage" class="success-message">تم إرسال البيانات بنجاح</div>
-        <div id="errorMessage" class="error-message">حدث خطأ أثناء إرسال البيانات</div>
-    </form>
-</div>
-
-<script>
-    const retrieveButton = document.getElementById("retrieveButton");
-
-    retrieveButton.addEventListener("click", function () {
-        const boxNumber = document.getElementById("retrieveBoxNumber").value;
-        const civilId = document.getElementById("retrieveCivilId").value;
-
-        if (!boxNumber || !civilId) {
-            alert("يرجى إدخال رقم الصندوق ورقم المدني.");
-            return;
-        }
-
-        fetch(`https://aa12-195-39-172-34.ngrok-free.app/api/get-shareholder?boxnumber=${boxNumber}&civilid=${civilId}`)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error("HTTP error " + response.status);
-                }
-                return response.json();
-            })
-            .then(data => {
-                if (data.length > 0) {
-                    const record = data[0];
-                    document.getElementById("name").value = record.name || '';
-                    document.getElementById("boxNumber").value = record.boxnumber || '';
-                    document.getElementById("civilId").value = record.civilid || '';
-                } else {
-                    alert("لا توجد بيانات مطابقة.");
-                }
-            })
-            .catch(err => {
-                console.error("Fetch error:", err);
-                alert("حدث خطأ أثناء جلب البيانات.");
-            });
-    });
-</script>
-</body>
-</html>
+        
