@@ -48,8 +48,7 @@
             margin-bottom: 5px;
         }
 
-        .input-group input, 
-        .input-group file {
+        .input-group input {
             width: 100%;
             padding: 10px;
             border: 1px solid #ccc;
@@ -129,30 +128,11 @@
             <label for="phone1">رقم الموبايل 1</label>
             <input type="number" id="phone1" name="phone1" required>
         </div>
-        <div class="input-group">
-            <label for="phone2">رقم الموبايل 2 (اختياري)</label>
-            <input type="number" id="phone2" name="phone2">
-        </div>
         <div id="fileInputsContainer" class="input-group">
             <label>رفع المستندات</label>
             <input type="file" name="files" class="file-upload" required>
         </div>
-        <button type="button" class="add-file-btn" id="addFileButton">إضافة مستند آخر</button>
-        <div class="input-group">
-            <label for="optionalEmail">البريد الإلكتروني (اختياري)</label>
-            <input type="email" id="optionalEmail" name="optionalEmail">
-        </div>
-        <button type="submit" class="upload-btn" id="submitButton" disabled>إرسال</button>
-        <div class="notes">
-            <p>المستندات المطلوبة حسب الحالة الاجتماعية:</p>
-            <ul>
-                <li>البطاقة المدنية لحامل البطاقة والمرافقين من تطبيق هويتي.</li>
-                <li>شهادة استمرارية زواج.</li>
-                <li>شهادة طلاق.</li>
-                <li>حكم حضانة.</li>
-                <li>شهادة ميلاد.</li>
-            </ul>
-        </div>
+        <button type="submit" class="upload-btn" id="submitButton">إرسال</button>
         <div id="successMessage" class="success-message">تم إرسال البيانات بنجاح</div>
         <div id="errorMessage" class="error-message">حدث خطأ أثناء إرسال البيانات</div>
     </form>
@@ -160,9 +140,6 @@
 
 <script>
     const retrieveButton = document.getElementById("retrieveButton");
-    const submitButton = document.getElementById("submitButton");
-    const addFileButton = document.getElementById("addFileButton");
-    const fileInputsContainer = document.getElementById("fileInputsContainer");
 
     retrieveButton.addEventListener("click", function () {
         const boxNumber = document.getElementById("retrieveBoxNumber").value;
@@ -173,83 +150,28 @@
             return;
         }
 
-        fetch('https://aa12-195-39-172-34.ngrok-free.app/api/get-shareholder?boxnumber=${boxNumber}&civilid=${civilId}`)
-            .then(response => response.json())
+        fetch(`https://aa12-195-39-172-34.ngrok-free.app/api/get-shareholder?boxnumber=${boxNumber}&civilid=${civilId}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("HTTP error " + response.status);
+                }
+                return response.json();
+            })
             .then(data => {
-                if (data.success) {
-                    document.getElementById("name").value = data.data.name || '';
-                    document.getElementById("boxNumber").value = data.data.boxnumber || '';
-                    document.getElementById("civilId").value = data.data.civilid || '';
-                    checkFormValidity();
+                if (data.length > 0) {
+                    const record = data[0];
+                    document.getElementById("name").value = record.name || '';
+                    document.getElementById("boxNumber").value = record.boxnumber || '';
+                    document.getElementById("civilId").value = record.civilid || '';
                 } else {
-                    alert(data.message || "لم يتم العثور على البيانات.");
+                    alert("لا توجد بيانات مطابقة.");
                 }
             })
-            .catch(() => alert("حدث خطأ أثناء جلب البيانات."));
-    });
-
-    addFileButton.addEventListener("click", function () {
-        const input = document.createElement("input");
-        input.type = "file";
-        input.name = "files";
-        input.classList.add("file-upload");
-        fileInputsContainer.appendChild(input);
-        checkFormValidity();
-    });
-
-    document.getElementById("familyForm").addEventListener("submit", function (event) {
-        event.preventDefault();
-
-        const formData = new FormData(this);
-
-        fetch("https://aa12-195-39-172-34.ngrok-free.app/api/save-shareholder", {
-            method: "POST",
-            body: formData
-        })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    document.getElementById("successMessage").style.display = "block";
-                    document.getElementById("errorMessage").style.display = "none";
-                    downloadFiles(data.files);
-                } else {
-                    document.getElementById("successMessage").style.display = "none";
-                    document.getElementById("errorMessage").style.display = "block";
-                }
-            })
-            .catch(() => {
-                document.getElementById("successMessage").style.display = "none";
-                document.getElementById("errorMessage").style.display = "block";
+            .catch(err => {
+                console.error("Fetch error:", err);
+                alert("حدث خطأ أثناء جلب البيانات.");
             });
     });
-
-    function checkFormValidity() {
-        const name = document.getElementById("name").value;
-        const boxNumber = document.getElementById("boxNumber").value;
-        const civilId = document.getElementById("civilId").value;
-        const phone1 = document.getElementById("phone1").value;
-        const files = document.querySelectorAll(".file-upload");
-
-        const hasFiles = Array.from(files).some(input => input.files.length > 0);
-
-        if (name && boxNumber && civilId && phone1 && hasFiles) {
-            submitButton.disabled = false;
-        } else {
-            submitButton.disabled = true;
-        }
-    }
-
-    function downloadFiles(files) {
-        files.forEach(fileUrl => {
-            const a = document.createElement("a");
-            a.href = fileUrl;
-            a.download = fileUrl.split("/").pop();
-            a.click();
-        });
-    }
-
-    document.getElementById("familyForm").addEventListener("input", checkFormValidity);
 </script>
-
 </body>
 </html>
