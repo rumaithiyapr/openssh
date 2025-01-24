@@ -173,7 +173,7 @@
             return;
         }
 
-        fetch(`https://4f65-195-39-172-34.ngrok-free.app/api/get-shareholder?boxnumber=${boxNumber}&civilid=${civilId}`)
+        fetch('https://aa12-195-39-172-34.ngrok-free.app/api/get-shareholder?boxnumber=${boxNumber}&civilid=${civilId}`)
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
@@ -202,7 +202,7 @@
 
         const formData = new FormData(this);
 
-        fetch("https://4f65-195-39-172-34.ngrok-free.app/api/save-shareholder", {
+        fetch("https://aa12-195-39-172-34.ngrok-free.app/api/save-shareholder", {
             method: "POST",
             body: formData
         })
