@@ -97,20 +97,46 @@
     </div>
     <div class="header">تحديث بطاقة العائلة 2025</div>
 
-    <!-- Form to Retrieve Data -->
-    <form id="retrieveForm">
-        <div class="input-group">
-            <label for="retrieveBoxNumber">رقم الصندوق</label>
-            <input type="number" id="retrieveBoxNumber" required>
-        </div>
-        <div class="input-group">
-            <label for="retrieveCivilId">رقم المدني</label>
-            <input type="number" id="retrieveCivilId" required>
-        </div>
-        <button type="button" class="upload-btn" id="retrieveButton">جلب البيانات</button>
-    </form>
+<script>
+    const retrieveButton = document.getElementById("retrieveButton");
 
-    <!-- Form to Submit Data -->
+    retrieveButton.addEventListener("click", function () {
+        const boxNumber = document.getElementById("retrieveBoxNumber").value.trim();
+        const civilId = document.getElementById("retrieveCivilId").value.trim();
+
+        // Validate inputs
+        if (!boxNumber || !civilId) {
+            alert("يرجى إدخال رقم الصندوق ورقم المدني.");
+            return;
+        }
+
+        // Make the API call
+        fetch(`https://aa12-195-39-172-34.ngrok-free.app/api/get-shareholder?boxnumber=${boxNumber}&civilid=${civilId}`)
+            .then(response => {
+                if (!response.ok) {
+                    // Handle HTTP errors
+                    throw new Error(`HTTP error ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Check if data exists and is valid
+                if (data && data.length > 0) {
+                    const record = data[0];
+                    document.getElementById("name").value = record.name || '';
+                    document.getElementById("boxNumber").value = record.boxnumber || '';
+                    document.getElementById("civilId").value = record.civilid || '';
+                } else {
+                    alert("لا توجد بيانات مطابقة.");
+                }
+            })
+            .catch(err => {
+                console.error("Fetch error:", err);
+                alert("حدث خطأ أثناء جلب البيانات. يرجى المحاولة مرة أخرى.");
+            });
+    });
+</script>
+
     <form id="familyForm" enctype="multipart/form-data">
         <div class="input-group">
             <label for="name">الاسم</label>
